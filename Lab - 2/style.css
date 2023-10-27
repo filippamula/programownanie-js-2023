@@ -1,21 +1,90 @@
-#slider-container{
-    margin-left: auto;
-    margin-right: auto;
-    width: fit-content;
-    overflow: hidden;
+#slider-container {
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+  overflow: hidden;
 }
 
-.slider{
-    width: 600px;
-    height: 400px;
-    display: flex;
+.slider {
+  width: 600px;
+  height: 400px;
+  display: flex;
+  transition: transform 0.8s ease-in-out;
 }
 
-@keyframes sliderNext {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-600px);
-    }
+.slider.fade {
+  position: relative;
+}
+
+.slide {
+  min-width: 600px;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+
+.slide.fade {
+  position: absolute;
+  transition: opacity 0.8s ease-in-out;
+}
+
+.text {
+  font-size: 1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.slider-btn {
+  font-size: 2rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.slider-controler {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 0.5rem;
+  width: 60%;
+  margin: 0 auto;
+}
+
+.slider-indicator {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.indicator.active {
+  background-color: rgb(49, 49, 49);
+}
+
+.indicator {
+  background-color: gray;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: all 0.5s ease-in-out;
+}
+
+#lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: none;
+}
+
+#lightbox.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }

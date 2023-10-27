@@ -1,42 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
+  <body>
     <div id="slider-container">
-        <div class="slider">
-            <div class="slide">
-                <img src="http://picsum.photos/seed/pic1/600/400" alt="">    
-            </div>
-        	<div class="slide">
-                <img src="http://picsum.photos/seed/pic2/600/400" alt="">
-            </div>
-            <div class="slide">
-                <img src="http://picsum.photos/seed/pic3/600/400" alt="">
-            </div>
-            <div class="slide">
-                <img src="http://picsum.photos/seed/pic4/600/400" alt="">
-            </div>
-            <div class="slide">
-                <img src="http://picsum.photos/seed/pic5/600/400" alt="">
-            </div>
-            <div class="slide">
-                <img src="http://picsum.photos/seed/pic6/600/400" alt="">
-            </div>
-            <div class="slide">
-                <img src="http://picsum.photos/seed/pic7/600/400" alt="">
-            </div>
+      <div class="slider">
+        <div class="slide">
+          <img src="http://picsum.photos/seed/pic1/300/300" alt="" />
+          <div class="text">
+            <h1>Text</h1>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
+              voluptatum, quibusdam, voluptate, quia quod quos voluptas
+              voluptatem quas quidem quibusdam, voluptate, quia quod quos
+              voluptas voluptatem quas quidem
+            </p>
+            <button>click</button>
+          </div>
         </div>
+        <div class="slide">
+          <img src="http://picsum.photos/seed/pic2/600/400" alt="" />
+        </div>
+        <div class="slide">
+          <img src="http://picsum.photos/seed/pic3/600/400" alt="" />
+        </div>
+        <div class="slide">
+          <img src="http://picsum.photos/seed/pic4/600/400" alt="" />
+        </div>
+        <div class="slide">
+          <img src="http://picsum.photos/seed/pic5/600/400" alt="" />
+        </div>
+        <div class="slide">
+          <img src="http://picsum.photos/seed/pic6/600/400" alt="" />
+        </div>
+        <div class="slide">
+          <img src="http://picsum.photos/seed/pic7/600/400" alt="" />
+        </div>
+      </div>
+      <div class="slider-indicator">
+        <span class="slider-btn">&#8249;</span>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+        <span class="slider-btn">&#8250;</span>
+      </div>
+      <div class="slider-controler">
+        <button id="start">start</button>
+        <button id="stop">stop</button>
+        <button id="left">left</button>
+        <button id="right">right</button>
+        <button id="fade">fade</button>
+        <button id="slide">slide</button>
+      </div>
+      <div id="lightbox"><img /></div>
     </div>
-    <main>
-    </main>
+    <main></main>
     <script src="main.js"></script>
-</body>
-
+  </body>
 </html>
