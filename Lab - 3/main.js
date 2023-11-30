@@ -12,7 +12,7 @@ const soundMap = {
   w: hihatSound,
   e: kickSound,
   r: openhatSound,
-  " ": boomSound,
+  b: boomSound,
   u: rideSound,
   i: snareSound,
   o: tinkSound,
@@ -22,8 +22,9 @@ const soundMap = {
 const channelContainer = document.querySelector(".channels-container");
 const addChannelBtn = document.querySelector("#addChannel");
 const playSelectedBtn = document.querySelector("#playSelected");
+const loopCheckbox = document.querySelector("#loop");
 
-const channelMaxDuration = 10000; //ms
+const channelMaxDuration = 5000; //ms
 
 const channels = [];
 
@@ -75,6 +76,11 @@ function playRecordedSounds(recordedSounds) {
       recordedSound.sound.play();
     }, recordedSound.delay);
   });
+  if (loopCheckbox.checked) {
+    setTimeout(() => {
+      playRecordedSounds(recordedSounds);
+    }, channelMaxDuration);
+  }
 }
 
 function createChannel() {
