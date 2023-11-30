@@ -36,18 +36,10 @@ function play(sound) {
   channels.forEach((channel) => {
     if (channel.isRecording) {
       const currentTime = new Date().getTime();
-      const previousSoundTime =
-        channel.recordedSounds.length > 0
-          ? channel.recordedSounds[channel.recordedSounds.length - 1].endTime
-          : currentTime;
-
-      const gap = currentTime - previousSoundTime;
 
       const recordedSound = {
         sound: sound,
-        startTime: previousSoundTime,
-        endTime: currentTime,
-        gap: gap,
+        delay: currentTime - channel.recordStartTime,
       };
 
       channel.recordedSounds.push(recordedSound);
@@ -74,7 +66,7 @@ function playRecordedSounds(recordedSounds) {
     setTimeout(() => {
       recordedSound.sound.currentTime = 0;
       recordedSound.sound.play();
-    }, recordedSound.gap);
+    }, recordedSound.delay);
   });
 }
 
@@ -84,6 +76,7 @@ function createChannel() {
   channel.isRecording = false;
   channel.isSelected = false;
   channel.recordedSounds = [];
+  channel.recordStartTime = null;
 
   let checkbox = document.createElement("input");
   checkbox.type = "checkbox";
@@ -97,8 +90,15 @@ function createChannel() {
   recordBtn.textContent = "RECORD";
 
   recordBtn.addEventListener("click", () => {
-    channel.isRecording = !channel.isRecording;
-    recordBtn.textContent = channel.isRecording ? "STOP" : "RECORD";
+    if (channel.isRecording) {
+      recordBtn.textContent = "RECORD";
+      channel.isRecording = false;
+      return;
+    }
+    channel.isRecording = true;
+    channel.recordedSounds = [];
+    channel.recordStartTime = new Date().getTime();
+    recordBtn.textContent = "STOP";
   });
 
   let deleteBtn = document.createElement("button");
