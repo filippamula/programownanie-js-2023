@@ -23,6 +23,8 @@ const channelContainer = document.querySelector(".channels-container");
 const addChannelBtn = document.querySelector("#addChannel");
 const playSelectedBtn = document.querySelector("#playSelected");
 
+const channelMaxDuration = 10000; //ms
+
 const channels = [];
 
 document.addEventListener("keydown", (event) => {
@@ -36,6 +38,11 @@ function play(sound) {
   channels.forEach((channel) => {
     if (channel.isRecording) {
       const currentTime = new Date().getTime();
+
+      if (currentTime - channel.recordStartTime > channelMaxDuration) {
+        stopRecording(channel, channel.querySelector(".record"));
+        return;
+      }
 
       const recordedSound = {
         sound: sound,
@@ -91,14 +98,10 @@ function createChannel() {
 
   recordBtn.addEventListener("click", () => {
     if (channel.isRecording) {
-      recordBtn.textContent = "RECORD";
-      channel.isRecording = false;
-      return;
+      stopRecording(channel, recordBtn);
+    } else {
+      startRecording(channel, recordBtn);
     }
-    channel.isRecording = true;
-    channel.recordedSounds = [];
-    channel.recordStartTime = new Date().getTime();
-    recordBtn.textContent = "STOP";
   });
 
   let deleteBtn = document.createElement("button");
@@ -107,6 +110,7 @@ function createChannel() {
   deleteBtn.textContent = "DELETE";
 
   deleteBtn.addEventListener("click", () => {
+    channels.remove(channel);
     channelContainer.removeChild(channel);
   });
 
@@ -114,4 +118,16 @@ function createChannel() {
   channel.appendChild(recordBtn);
   channel.appendChild(deleteBtn);
   return channel;
+}
+
+function startRecording(channel, recordBtn) {
+  channel.isRecording = true;
+  channel.recordedSounds = [];
+  channel.recordStartTime = new Date().getTime();
+  recordBtn.textContent = "STOP";
+}
+
+function stopRecording(channel, recordBtn) {
+  recordBtn.textContent = "RECORD";
+  channel.isRecording = false;
 }
