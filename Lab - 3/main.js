@@ -23,6 +23,8 @@ const channelContainer = document.querySelector(".channels-container");
 const addChannelBtn = document.querySelector("#addChannel");
 const playSelectedBtn = document.querySelector("#playSelected");
 const loopCheckbox = document.querySelector("#loop");
+const bpmInput = document.querySelector("#bpm");
+const metronomeBtn = document.querySelector("#metronome");
 
 const channelMaxDuration = 5000; //ms
 
@@ -136,4 +138,26 @@ function startRecording(channel, recordBtn) {
 function stopRecording(channel, recordBtn) {
   recordBtn.textContent = "RECORD";
   channel.isRecording = false;
+}
+
+metronomeBtn.addEventListener("click", () => {
+  if (metronomeBtn.textContent === "START") {
+    metronomeBtn.textContent = "STOP";
+    startMetronome();
+  } else {
+    metronomeBtn.textContent = "START";
+    stopMetronome();
+  }
+});
+
+function startMetronome() {
+  const bpm = bpmInput.value;
+  const interval = 60000 / bpm;
+  metronomeInterval = setInterval(() => {
+    play(soundMap["o"]);
+  }, interval);
+}
+
+function stopMetronome() {
+  clearInterval(metronomeInterval);
 }

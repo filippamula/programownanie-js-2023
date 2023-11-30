@@ -24,7 +24,18 @@
     </div>
     <button id="playSelected">PLAY SELECTED</button>
     <input type="checkbox" id="loop" />loop
-
+    <br />
+    metronome
+    <input
+      id="bpm"
+      type="range"
+      value="60"
+      min="10"
+      max="240"
+      oninput="this.nextElementSibling.value = this.value"
+    />
+    <output>24</output>
+    <button id="metronome">START</button>
     <script src="main.js"></script>
   </body>
 </html>
