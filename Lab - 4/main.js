@@ -6,6 +6,9 @@ const dateInput = document.querySelector("#date");
 const tagsInput = document.querySelector("#tags");
 
 const clearBtn = document.querySelector("#clear");
+const searchInput = document.querySelector("#searchInput");
+const searchBtn = document.querySelector("#search");
+
 const addNoteBtn = document.querySelector("#addNote");
 const notesContainer = document.querySelector("#notesContainer");
 
@@ -15,14 +18,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const notesFromLocalStorage = JSON.parse(localStorage.getItem("notes"));
   if (notesFromLocalStorage) {
     notes.push(...notesFromLocalStorage);
-    renderNotes();
+    renderNotes(notes);
   }
 });
 
 clearBtn.addEventListener("click", () => {
   localStorage.clear();
   notes.length = 0;
-  renderNotes();
+  renderNotes(notes);
 });
 
 addNoteBtn.addEventListener("click", () => {
@@ -47,7 +50,7 @@ addNoteBtn.addEventListener("click", () => {
   };
 
   saveNote(note);
-  renderNotes();
+  renderNotes(notes);
 });
 
 function saveNote(note) {
@@ -55,7 +58,7 @@ function saveNote(note) {
   localStorage.setItem("notes", JSON.stringify(notes));
 }
 
-function renderNotes() {
+function renderNotes(notes) {
   notesContainer.innerHTML = "";
   notes.forEach((note) => {
     notesContainer.appendChild(createNote(note));
@@ -78,7 +81,7 @@ function createNote(note) {
   deleteBtn.addEventListener("click", () => {
     notes.splice(notes.indexOf(note), 1);
     localStorage.setItem("notes", JSON.stringify(notes));
-    renderNotes();
+    renderNotes(notes);
   });
 
   const todoElement = document.createElement("div");
@@ -90,7 +93,7 @@ function createNote(note) {
     if (todo) {
       note.todos.push({ name: todo, checked: false });
       localStorage.setItem("notes", JSON.stringify(notes));
-      renderNotes();
+      renderNotes(notes);
     }
   });
 
@@ -114,7 +117,7 @@ function createTodos(note) {
     todoCheckbox.addEventListener("change", () => {
       todo.checked = !todo.checked;
       localStorage.setItem("notes", JSON.stringify(notes));
-      renderNotes();
+      renderNotes(notes);
     });
 
     const contentElement = document.createElement("span");
@@ -129,9 +132,22 @@ function createTodos(note) {
     deleteTodoBtn.addEventListener("click", () => {
       note.todos.splice(note.todos.indexOf(todo), 1);
       localStorage.setItem("notes", JSON.stringify(notes));
-      renderNotes();
+      renderNotes(notes);
     });
     todoElement.appendChild(deleteTodoBtn);
   });
   return todoElement;
 }
+
+searchBtn.addEventListener("click", () => {
+  const searchValue = searchInput.value;
+  const filteredNotes = notes.filter((note) => {
+    return (
+      note.title.includes(searchValue) ||
+      note.content.includes(searchValue) ||
+      note.tags.includes(searchValue) ||
+      note.todos.some((todo) => todo.name.includes(searchValue))
+    );
+  });
+  renderNotes(filteredNotes);
+});
