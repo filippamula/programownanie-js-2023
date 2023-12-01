@@ -68,22 +68,32 @@ function saveNote(note) {
 
 function renderNotes(notes) {
   notesContainer.innerHTML = "";
-  notes.forEach((note) => {
+  notes.sort(sortTrueFirst).forEach((note) => {
     notesContainer.appendChild(createNote(note));
   });
 }
 
 function createNote(note) {
   const noteElement = document.createElement("div");
-  noteElement.classList.add("note");
+  noteElement.style.marginTop = "10px";
   noteElement.style.backgroundColor = note.color;
   noteElement.innerHTML = `
             <p>${note.tags}</p>
             <h2>${note.title}</h2>
             <p>${note.date}</p>
             <p>${note.content}</p>
-            <p>${note.pinned ? "pinned" : ""}</p>
         `;
+
+  const pinnedElement = document.createElement("input");
+  pinnedElement.type = "checkbox";
+  pinnedElement.checked = note.pinned;
+  pinnedElement.addEventListener("change", () => {
+    notes[notes.indexOf(note)].pinned = !note.pinned;
+    localStorage.setItem("notes", JSON.stringify(notes));
+    renderNotes(notes);
+  });
+  noteElement.appendChild(pinnedElement);
+
   const deleteBtn = document.createElement("button");
   deleteBtn.textContent = "Delete";
   deleteBtn.addEventListener("click", () => {
@@ -159,3 +169,7 @@ searchBtn.addEventListener("click", () => {
   });
   renderNotes(filteredNotes);
 });
+
+function sortTrueFirst(a, b) {
+  return b.pinned - a.pinned;
+}
