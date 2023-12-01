@@ -19,6 +19,14 @@ document.addEventListener("DOMContentLoaded", () => {
   if (notesFromLocalStorage) {
     notes.push(...notesFromLocalStorage);
     renderNotes(notes);
+
+    const todayNotes = notes.filter((note) => {
+      return note.date === new Date().toISOString().slice(0, 10);
+    });
+    if (todayNotes.length > 0) {
+      notesTitlesString = todayNotes.map((note) => note.title).join(", ");
+      alert(`Notes for today:\n${notesTitlesString}`);
+    }
   }
 });
 
