@@ -1,0 +1,19 @@
+#weatherContainer{
+    display: flex;
+    margin-top: 2rem;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.city{
+    margin: 10px 10px;
+    border: 1px solid #000;
+    padding: 1rem;
+    text-align: center;
+    width: 200px;
+}
+
+p{
+    margin-top: 0;
+    margin-bottom: 5px;
+}
