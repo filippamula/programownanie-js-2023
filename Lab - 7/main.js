@@ -132,7 +132,6 @@ async function fetchWeatherData(lat, lon) {
     await fetch(url)
         .then(response => response.json())
         .then(data => {
-            console.log(data)
             weatherData = {
                 temp: data.main.temp,
                 description: data.weather[0].description,
