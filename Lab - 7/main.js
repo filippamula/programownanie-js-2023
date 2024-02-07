@@ -4,21 +4,32 @@ const errorInfo = document.querySelector("#addingError")
 const weatherContainer = document.querySelector("#weatherContainer")
 
 const apiKey = "249787baa3b052ab7b3bbe37c0fbd74d"
-const citiesStorage = "cities"
+const citiesStorage = "weather"
 
 renderCitiesFromStorage()
+
+setInterval(async () => {
+    await updateWeatherData()
+    renderCitiesFromStorage()
+}, 1000 * 60 * 5)
 
 addBtn.addEventListener("click", async () => {
     errorInfo.textContent = ""
     let city = addInput.value
     let cityCoordinates
+    let cityWeather
     try { cityCoordinates = await fetchCityCoordinates(city) }
     catch (e) {
         errorInfo.textContent = "City not found"
         return
     }
+    try { cityWeather = await fetchWeatherData(cityCoordinates.lat, cityCoordinates.lon) }
+    catch (e) {
+        errorInfo.textContent = `Error while fetching weather data for city: ${city}`
+        return
+    }
 
-    addCityToStorage(cityCoordinates)
+    addCityWeatherToStorage({ city: cityCoordinates, cityWeather: cityWeather, date: new Date() })
     renderCitiesFromStorage()
 })
 
@@ -26,8 +37,13 @@ function renderCitiesFromStorage() {
     weatherContainer.innerHTML = ""
     let cities = JSON.parse(localStorage.getItem(citiesStorage)) || []
     cities.forEach(async city => {
-        let cityWeather = await fetchWeatherData(city.lat, city.lon)
-        let cityElement = createCityElement(city, cityWeather)
+        let cityElement
+        if (city.date - new Date() > 1000 * 60 * 5) {
+            let cityWeather = await fetchWeatherData(city.city.lat, city.city.lon)
+            cityElement = createCityElement(city.city, cityWeather)
+        } else {
+            cityElement = createCityElement(city.city, city.cityWeather)
+        }
         weatherContainer.appendChild(cityElement)
     })
 }
@@ -35,7 +51,7 @@ function renderCitiesFromStorage() {
 function createCityElement(city, weatherData) {
     let cityDiv = document.createElement("div")
     cityDiv.classList.add("city")
-    cityDiv.textContent = city.city
+    cityDiv.textContent = city.name
 
     let iconDiv = document.createElement("div")
     let icon = document.createElement("img")
@@ -66,9 +82,9 @@ function createCityElement(city, weatherData) {
     return cityDiv
 }
 
-function addCityToStorage(city) {
+function addCityWeatherToStorage(cityWeather) {
     let cities = JSON.parse(localStorage.getItem(citiesStorage)) || []
-    if (cities.some(c => c.city === city.city)) {
+    if (cities.some(c => c.city.name === cityWeather.city.name)) {
         errorInfo.textContent = "City already added"
         return
     }
@@ -77,7 +93,7 @@ function addCityToStorage(city) {
         return
     }
 
-    cities.push(city)
+    cities.push(cityWeather)
     localStorage.setItem(citiesStorage, JSON.stringify(cities))
 }
 
@@ -88,13 +104,23 @@ function removeCityFromStorage(city) {
     localStorage.setItem(citiesStorage, JSON.stringify(cities))
 }
 
+async function updateWeatherData() {
+    let cities = JSON.parse(localStorage.getItem(citiesStorage)) || []
+    await cities.forEach(async city => {
+        let cityWeather = await fetchWeatherData(city.city.lat, city.city.lon)
+        city.cityWeather = cityWeather
+        city.date = new Date()
+        localStorage.setItem(citiesStorage, JSON.stringify(cities))
+    })
+}
+
 async function fetchCityCoordinates(city) {
     let url = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${apiKey}`
     let coordinates
     await fetch(url)
         .then(response => response.json())
         .then(data => {
-            coordinates = { city: data[0].name, lat: data[0].lat, lon: data[0].lon }
+            coordinates = { name: data[0].name, lat: data[0].lat, lon: data[0].lon }
         })
 
     return coordinates
