@@ -1,6 +1,7 @@
 const addInput = document.querySelector("#add").querySelector("input")
 const addBtn = document.querySelector("#add").querySelector("button")
 const errorInfo = document.querySelector("#addingError")
+const suggestionDiv = document.querySelector("#suggestion")
 const weatherContainer = document.querySelector("#weatherContainer")
 
 const apiKey = "249787baa3b052ab7b3bbe37c0fbd74d"
@@ -31,6 +32,17 @@ addBtn.addEventListener("click", async () => {
 
     addCityWeatherToStorage({ city: cityCoordinates, cityWeather: cityWeather, date: new Date() })
     renderCitiesFromStorage()
+})
+
+addInput.addEventListener("input", async () => {
+    let city = addInput.value
+    let cityCoordinates
+    try { cityCoordinates = await fetchCityCoordinates(city) }
+    catch (e) {
+        suggestionDiv.textContent = "City not found"
+        return
+    }
+    suggestionDiv.textContent = cityCoordinates.name
 })
 
 function renderCitiesFromStorage() {
