@@ -86,7 +86,7 @@ function createCityElement(city, weatherData) {
     let removeBtn = document.createElement("button")
     removeBtn.textContent = "Remove"
     removeBtn.addEventListener("click", () => {
-        removeCityFromStorage(city.city)
+        removeCityFromStorage(city)
         renderCitiesFromStorage()
     })
     cityDiv.appendChild(removeBtn)
@@ -111,7 +111,7 @@ function addCityWeatherToStorage(cityWeather) {
 
 function removeCityFromStorage(city) {
     let cities = JSON.parse(localStorage.getItem(citiesStorage)) || []
-    let index = cities.findIndex(c => c.city === city)
+    let index = cities.findIndex(c => c.city.name === city.name)
     cities.splice(index, 1)
     localStorage.setItem(citiesStorage, JSON.stringify(cities))
 }
